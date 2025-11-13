@@ -1,0 +1,57 @@
+[
+  {
+    "Name": "MechaMan",
+    "Role": "Leader/Dispatcher",
+    "PowerLevel": 85
+  },
+  {
+    "Name": "Coupe",
+    "Role": "Allround DPS",
+    "PowerLevel": 81
+  },
+  {
+    "Name": "Malevola",
+    "Role": "Support / Healer",
+    "PowerLevel": 79
+  },
+  {
+    "Name": "Invisigal",
+    "Role": "Stealth Specialist",
+    "PowerLevel": 84
+  },
+  {
+    "Name": "Punch Up",
+    "Role": "Tank / Bruiser",
+    "PowerLevel": 88
+  },
+  {
+    "Name": "Flambae",
+    "Role": "Pyro Attacker",
+    "PowerLevel": 83
+  },
+  {
+    "Name": "Prism",
+    "Role": "Support / Duplicator",
+    "PowerLevel": 76
+  },
+  {
+    "Name": "Golem",
+    "Role": "Defender / Heavy Tank",
+    "PowerLevel": 90
+  },
+  {
+    "Name": "Phenomaman",
+    "Role": "Alien Powerhouse",
+    "PowerLevel": 85
+  },
+  {
+    "Name": "Waterboy",
+    "Role": "Support / Field Medic",
+    "PowerLevel": 74
+  },
+  {
+    "Name": "Sonar",
+    "Role": "Adaptive Hybrid",
+    "PowerLevel": 80
+  }
+]
