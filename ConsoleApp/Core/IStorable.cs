@@ -7,10 +7,8 @@ namespace DispatchGame.Core
         T Get(int index);
         void DisplayAll();
         int Count { get; }
-
         T? FindByName(string name);
         void SortByPowerLevel();
-
         void SaveToJson(string filePath);
         void LoadFromJson(string filePath);
     }
