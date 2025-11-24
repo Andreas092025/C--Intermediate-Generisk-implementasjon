@@ -1,3 +1,4 @@
+
 namespace DispatchGame.Core
 {
     public interface IStorable<T>
@@ -8,8 +9,9 @@ namespace DispatchGame.Core
         void DisplayAll();
         int Count { get; }
         T? FindByName(string name);
-        void SortByPowerLevel();
+        void ReplaceAll (IEnumerable<T> items);
         void SaveToJson(string filePath);
         void LoadFromJson(string filePath);
+        IReadOnlyList<T> GetAll();
     }
 }

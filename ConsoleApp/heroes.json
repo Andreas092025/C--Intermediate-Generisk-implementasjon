@@ -1,7 +1,7 @@
 [
   {
     "Name": "MechaMan",
-    "Role": "Leader/Dispatcher",
+    "Role": "Leader / Dispatcher",
     "PowerLevel": 85
   },
   {
@@ -53,5 +53,10 @@
     "Name": "Sonar",
     "Role": "Adaptive Hybrid",
     "PowerLevel": 80
+  },
+  {
+    "Name": "John",
+    "Role": "Elite Programmer",
+    "PowerLevel": 1337
   }
 ]
