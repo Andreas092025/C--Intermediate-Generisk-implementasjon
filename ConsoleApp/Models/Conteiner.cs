@@ -1,5 +1,6 @@
 using System.Text.Json;
 using DispatchGame.Core;
+using DispatchGame.UI;
 
 namespace DispatchGame.Models
 {
@@ -19,7 +20,7 @@ namespace DispatchGame.Models
         {
             if (items.Count == 0)
             {
-                Console.WriteLine("Containeren er tom.");
+                Console.WriteLine(LanguageService.T("container_empty"));
                 return;
             }
 
@@ -73,14 +74,14 @@ namespace DispatchGame.Models
             );
 
             File.WriteAllText(filePath, json);
-            Console.WriteLine($"Helter ble lagret til {filePath}");
+            Console.WriteLine(string.Format(LanguageService.T("saved_to"), filePath));
         }
 
         public void LoadFromJson(string filePath)
         {
             if (!File.Exists(filePath))
             {
-                Console.WriteLine("Fant ingen JSON-fil.");
+                Console.WriteLine(LanguageService.T("json_not_found"));
                 return;
             }
 
@@ -90,7 +91,7 @@ namespace DispatchGame.Models
             if (loadedItems != null)
             {
                 items = loadedItems;
-                Console.WriteLine("Helter ble lastet inn fra JSON.");
+                Console.WriteLine(LanguageService.T("json_loaded"));
             }
         }
 

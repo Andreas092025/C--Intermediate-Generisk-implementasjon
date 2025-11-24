@@ -29,6 +29,7 @@ namespace DispatchGame.UI
                         { "enter_role", "Skriv inn rolle:" },
                         { "enter_power", "Skriv inn powerlevel:" },
                         { "hero_not_found", "Ingen helt funnet med det navnet." },
+                        
                         // Additional keys used by Menu
                         { "no_heroes", "Ingen helter i laget." },
                         { "col_name", "Navn" },
@@ -58,8 +59,15 @@ namespace DispatchGame.UI
                         { "no_choice", "Nei" },
                         { "hero_removed", "{0} ble fjernet fra laget!" },
                         { "remove_cancelled", "Fjerning avbrutt." },
+                        { "editing_cancelled", "Redigering avbrutt." },
                         { "press_any_key", "Trykk en tast for å fortsette..." },
                         { "updated", "Oppdatert!" },
+
+                        // Container / JSON messages
+                        { "container_empty", "Containeren er tom." },
+                        { "saved_to", "Helter ble lagret til {0}" },
+                        { "json_not_found", "Fant ingen JSON-fil." },
+                        { "json_loaded", "Helter ble lastet inn fra JSON." },
                     }
                 },
 
@@ -113,8 +121,15 @@ namespace DispatchGame.UI
                         { "no_choice", "No" },
                         { "hero_removed", "{0} was removed from the team!" },
                         { "remove_cancelled", "Removal cancelled." },
+                        { "editing_cancelled", "Editing cancelled." },
                         { "press_any_key", "Press any key to continue..." },
                         { "updated", "Updated!" },
+
+                        // Container / JSON messages
+                        { "container_empty", "The container is empty." },
+                        { "saved_to", "Heroes were saved to {0}" },
+                        { "json_not_found", "No JSON file found." },
+                        { "json_loaded", "Heroes were loaded from JSON." },
                     }
                 }
             };

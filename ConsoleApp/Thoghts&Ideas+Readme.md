@@ -15,7 +15,8 @@
 - [X] Add a better Sorting system so it isn't just decending.
 
 - [X] Add a language setting button to change between Norwegian and English for English speaking users.
-    -  DONE!
+    - DONE!
+    - Even changed some descreption in the Code 
 
 - [ ] Add more ideas when you have time.
 

@@ -28,9 +28,11 @@ namespace DispatchGame.UI
                 AnsiConsole.Write(
                 new FigletText("DataBase Menu")
                 .Color(Color.Yellow));
+               
                /* AnsiConsole.Clear();
                 _dispatchLogo.MaxWidth(80);
                 AnsiConsole.Write(_dispatchLogo); */
+
                 // Localized menu choices
                 var view = LanguageService.T("view_heroes");
                 var add = LanguageService.T("add_hero");
@@ -69,7 +71,7 @@ namespace DispatchGame.UI
         }
 
         // --------------------------------------------------------
-        //         VIS ALLE HELTER
+        //         VIS ALLE HELTER - SHOW ALL HEROES
         // --------------------------------------------------------
         private void DisplayHeroes()
         {
@@ -102,7 +104,7 @@ namespace DispatchGame.UI
         }
 
         // --------------------------------------------------------
-        //         LEGG TIL HELT
+        //         LEGG TIL HELT - ADD HERO
         // --------------------------------------------------------
         private void AddHero()
         {
@@ -117,7 +119,7 @@ namespace DispatchGame.UI
         }
 
         // --------------------------------------------------------
-        //         REDIGER HELT
+        //         REDIGER HELT - EDIT HERO
         // --------------------------------------------------------
 
         private void EditHero()
@@ -159,7 +161,7 @@ namespace DispatchGame.UI
             }
             else // cancel
             {
-                AnsiConsole.MarkupLine($"[yellow]{LanguageService.T("remove_cancelled")}[/]");
+                AnsiConsole.MarkupLine($"[yellow]{LanguageService.T("editing_cancelled")}[/]");
                 Pause();
                 return;
             }
@@ -170,7 +172,7 @@ namespace DispatchGame.UI
 
 
         // --------------------------------------------------------
-        //         FINN HELT
+        //         FINN HELT - FIND HERO
         // --------------------------------------------------------
         private void FindHero()
         {
@@ -187,7 +189,7 @@ namespace DispatchGame.UI
         }
 
         // --------------------------------------------------------
-        //         SORTER HELTER
+        //         SORTER HELTER - SORT HEROES
         // --------------------------------------------------------
 
         private void SortHeroes()
@@ -223,7 +225,7 @@ namespace DispatchGame.UI
         }
         
         // --------------------------------------------------------
-        //         ENDRE SPRÅK
+        //         ENDRE SPRÅK - CHANGE LANGUAGE
         // --------------------------------------------------------
         private void ChangeLanguage()
         {
@@ -242,7 +244,7 @@ namespace DispatchGame.UI
 
 
         // --------------------------------------------------------
-        //         FJERN HELT
+        //         FJERN HELT - REMOVE HERO
         // --------------------------------------------------------
         private void RemoveHero()
         {
