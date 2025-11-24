@@ -1,3 +1,4 @@
+using Spectre.Console;
 using DispatchGame.Models;
 using DispatchGame.Core;
 
@@ -6,8 +7,10 @@ namespace DispatchGame.UI
     public class Menu
     {
         private readonly IStorable<Hero> _zTeam;
-        public Menu(IStorable<Hero> zTeam)
 
+        private readonly CanvasImage _dispatchLogo = new CanvasImage("./Picture/Test_Logo.png"); // Ville ikke funke som håpet
+
+        public Menu(IStorable<Hero> zTeam)
         {
             _zTeam = zTeam;
         }
@@ -18,118 +21,269 @@ namespace DispatchGame.UI
 
             while (running)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("\n=== Dispatch: Z-Team Menu ===");
-                Console.WriteLine("1. Vis alle helter");
-                Console.WriteLine("2. Legg til en ny helt");
-                Console.WriteLine("3. Finn helt etter navn");
-                Console.WriteLine("4. Sorter etter Power Level (Synkende)");
-                Console.WriteLine("5. Fjern en helt");
-                Console.WriteLine("6. Lagre helter (JSON)");
-                Console.WriteLine("7. Last inn helter (JSON)");
+                AnsiConsole.Clear();
+                AnsiConsole.Write(
+                new FigletText("DISPATCH")
+                .Color(Color.Yellow));
+                AnsiConsole.Write(
+                new FigletText("DataBase Menu")
+                .Color(Color.Yellow));
+               
+               /* AnsiConsole.Clear();
+                _dispatchLogo.MaxWidth(80);
+                AnsiConsole.Write(_dispatchLogo); */
 
-                Console.WriteLine("0. Avslutt");
-                Console.Write("Velg et alternativ: ");
-                Console.ResetColor();
+                // Localized menu choices
+                var view = LanguageService.T("view_heroes");
+                var add = LanguageService.T("add_hero");
+                var find = LanguageService.T("find_hero");
+                var sort = LanguageService.T("sort_heroes");
+                var edit = LanguageService.T("edit_hero");
+                var remove = LanguageService.T("remove_hero");
+                var save = LanguageService.T("save_json");
+                var load = LanguageService.T("load_json");
+                var changeLang = LanguageService.T("change_language");
+                var exit = LanguageService.T("exit");
 
-                switch (Console.ReadLine())
+                var choice = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .AddChoices(new[] { view, add, find, sort, edit, remove, save, load, changeLang, exit }));
+
+                if (choice == view) DisplayHeroes();
+                else if (choice == add) AddHero();
+                else if (choice == find) FindHero();
+                else if (choice == sort) SortHeroes();
+                else if (choice == edit) EditHero();
+                else if (choice == remove) RemoveHero();
+                else if (choice == save)
                 {
-                    case "1":
-                        Console.WriteLine("\n=== Z-Team ===");
-                        _zTeam.DisplayAll();
-                        break;
-
-                    case "2":
-                        AddHero();
-                        break;
-
-                    case "3":
-                        FindHero();
-                        break;
-
-                    case "4":
-                        _zTeam.SortByPowerLevel();
-                        Console.WriteLine("Heltene er nå sortert etter Power Level (synkende).");
-                        _zTeam.DisplayAll();
-                        break;
-
-                    case "5":
-                        RemoveHero();
-                        break;
-
-                    case "6":
-                        _zTeam.SaveToJson("heroes.json");
-                        break;
-
-                    case "7":
-                        _zTeam.LoadFromJson("heroes.json");
-                        break;
-                    
-                    case "0":
-                        running = false;
-                        Console.WriteLine("Avslutter programmet...");
-                        break;
-
-                    default:
-                        Console.WriteLine("Ugyldig valg. Prøv igjen.");
-                        break;
+                    _zTeam.SaveToJson("heroes.json");
+                    Pause();
                 }
+                else if (choice == load)
+                {
+                    _zTeam.LoadFromJson("heroes.json");
+                    Pause();
+                }
+                else if (choice == changeLang) ChangeLanguage();
+                else if (choice == exit) running = false;
             }
         }
 
-        private void AddHero()
+        // --------------------------------------------------------
+        //         VIS ALLE HELTER - SHOW ALL HEROES
+        // --------------------------------------------------------
+        private void DisplayHeroes()
         {
-            Console.WriteLine("\nLegg til en ny helt:");
-            Console.Write("Navn: ");
-            string name = (Console.ReadLine() ?? "Ukjent").Replace(",", " / ");
+            var heroes = _zTeam.GetAll();
 
-            Console.Write("Rolle: ");
-            string role = (Console.ReadLine() ?? "Ukjent").Replace(",", "/");
+            if (heroes.Count == 0)
+            {
+                AnsiConsole.MarkupLine($"[red]{LanguageService.T("no_heroes")}[/]");
+                Pause();
+                return;
+            }
 
-            Console.Write("Power Level: ");
-            int powerLevel = int.TryParse(Console.ReadLine(), out int pl) ? pl : 50;
+            var table = new Table()
+                .Border(TableBorder.Rounded)
+                .AddColumn($"[bold aqua]{LanguageService.T("col_name")}[/]")
+                .AddColumn($"[bold aqua]{LanguageService.T("col_role")}[/]")
+                .AddColumn($"[bold aqua]{LanguageService.T("col_power")}[/]");
 
-            _zTeam.Add(new Hero(name, role, powerLevel));
-            Console.WriteLine($"{name} ble lagt til i Z-Teamet!");
+            foreach (var hero in heroes)
+            {
+                table.AddRow(
+                    hero.Name,
+                    hero.Role,
+                    hero.PowerLevel.ToString()
+                );
+            }
+
+            AnsiConsole.Write(table);
+            Pause();
         }
 
+        // --------------------------------------------------------
+        //         LEGG TIL HELT - ADD HERO
+        // --------------------------------------------------------
+        private void AddHero()
+        {
+            string name = AnsiConsole.Ask<string>(LanguageService.T("enter_name"));
+            string role = AnsiConsole.Ask<string>(LanguageService.T("enter_role")).Replace(",", " / ");
+            int power = AnsiConsole.Ask<int>(LanguageService.T("enter_power"));
+
+            _zTeam.Add(new Hero(name, role, power));
+
+            AnsiConsole.MarkupLine($"[green]{string.Format(LanguageService.T("hero_added"), name)}[/]");
+            Pause();
+        }
+
+        // --------------------------------------------------------
+        //         REDIGER HELT - EDIT HERO
+        // --------------------------------------------------------
+
+        private void EditHero()
+        {
+            // 1. Ask which hero to edit
+            string name = AnsiConsole.Ask<string>(LanguageService.T("which_hero_edit"));
+            var hero = _zTeam.FindByName(name);
+
+            if (hero == null)
+            {
+                AnsiConsole.MarkupLine($"[red]{LanguageService.T("hero_not_found")}[/]");
+                Pause();
+                return;
+            }
+
+            // 2. Menu for what to edit
+            var editChoice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title(string.Format(LanguageService.T("what_edit_for"), hero.Name))
+                    .AddChoices(new[] { LanguageService.T("edit_name"), LanguageService.T("edit_role"), LanguageService.T("edit_power"), LanguageService.T("cancel") }));
+
+            if (editChoice == LanguageService.T("edit_name"))
+            {
+                string newName = AnsiConsole.Ask<string>(LanguageService.T("enter_name"));
+                hero.Name = newName.Replace(",", " / ");
+                AnsiConsole.MarkupLine($"[green]{LanguageService.T("updated")}[/]");
+            }
+            else if (editChoice == LanguageService.T("edit_role"))
+            {
+                string newRole = AnsiConsole.Ask<string>(LanguageService.T("enter_role"));
+                hero.Role = newRole.Replace(",", "/");
+                AnsiConsole.MarkupLine($"[green]{LanguageService.T("updated")}[/]");
+            }
+            else if (editChoice == LanguageService.T("edit_power"))
+            {
+                int newPower = AnsiConsole.Ask<int>(LanguageService.T("enter_power"));
+                hero.PowerLevel = newPower;
+                AnsiConsole.MarkupLine($"[green]{LanguageService.T("updated")}[/]");
+            }
+            else // cancel
+            {
+                AnsiConsole.MarkupLine($"[yellow]{LanguageService.T("editing_cancelled")}[/]");
+                Pause();
+                return;
+            }
+
+            Pause();
+        }
+
+
+
+        // --------------------------------------------------------
+        //         FINN HELT - FIND HERO
+        // --------------------------------------------------------
         private void FindHero()
         {
-            Console.Write("\nSøk etter helt-navn: ");
-            string name = Console.ReadLine() ?? "";
+            string name = AnsiConsole.Ask<string>(LanguageService.T("search_name"));
+
             var found = _zTeam.FindByName(name);
 
             if (found != null)
-                Console.WriteLine($"Fant: {found}");
+                AnsiConsole.MarkupLine($"[green]{string.Format(LanguageService.T("found_hero"), found.Name)}[/]");
             else
-                Console.WriteLine("Ingen helt funnet med det navnet.");
+                AnsiConsole.MarkupLine($"[red]{LanguageService.T("hero_not_found")}[/]");
+
+            Pause();
         }
 
-       private void RemoveHero()
+        // --------------------------------------------------------
+        //         SORTER HELTER - SORT HEROES
+        // --------------------------------------------------------
+
+        private void SortHeroes()
         {
-            Console.Write("\nSkriv navnet på helten du vil fjerne: ");
-            string name = Console.ReadLine() ?? "";
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title(LanguageService.T("sort_title"))
+                    .HighlightStyle("green")
+                    .AddChoices(
+                        LanguageService.T("sort_power_asc"),
+                        LanguageService.T("sort_power_desc"),
+                        LanguageService.T("sort_name_asc"),
+                        LanguageService.T("sort_name_desc"),
+                        LanguageService.T("sort_role_asc"),
+                        LanguageService.T("sort_role_desc"),
+                        LanguageService.T("cancel"))
+            );
+
+            var heroes = _zTeam.GetAll().ToList();
+
+            if (choice == LanguageService.T("sort_power_asc")) heroes = heroes.OrderBy(h => h.PowerLevel).ToList();
+            else if (choice == LanguageService.T("sort_power_desc")) heroes = heroes.OrderByDescending(h => h.PowerLevel).ToList();
+            else if (choice == LanguageService.T("sort_name_asc")) heroes = heroes.OrderBy(h => h.Name).ToList();
+            else if (choice == LanguageService.T("sort_name_desc")) heroes = heroes.OrderByDescending(h => h.Name).ToList();
+            else if (choice == LanguageService.T("sort_role_asc")) heroes = heroes.OrderBy(h => h.Role).ToList();
+            else if (choice == LanguageService.T("sort_role_desc")) heroes = heroes.OrderByDescending(h => h.Role).ToList();
+            else return; // back/cancel
+
+            _zTeam.ReplaceAll(heroes);
+            AnsiConsole.MarkupLine($"[green]{LanguageService.T("sorted_success")}[/]");
+            Pause();
+           
+        }
+        
+        // --------------------------------------------------------
+        //         ENDRE SPRÅK - CHANGE LANGUAGE
+        // --------------------------------------------------------
+        private void ChangeLanguage()
+        {
+            var lang = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Choose language / Velg språk")
+                    .AddChoices("Norsk", "English"));
+
+            if (lang == "Norsk") LanguageService.SetLanguage("no");
+            else LanguageService.SetLanguage("en");
+
+            AnsiConsole.MarkupLine($"[green]{LanguageService.T("language_updated")}[/]");
+            Pause();
+        }
+
+
+
+        // --------------------------------------------------------
+        //         FJERN HELT - REMOVE HERO
+        // --------------------------------------------------------
+        private void RemoveHero()
+        {
+            string name = AnsiConsole.Ask<string>(LanguageService.T("enter_name_remove"));
+
             var hero = _zTeam.FindByName(name);
 
-            if (hero != null)
+            if (hero == null)
             {
-                Console.Write($"Er du sikker på at du vil fjerne {name}? (y/n): ");
-                string confirmation = Console.ReadLine()?.Trim().ToLower() ?? "n";
+                AnsiConsole.MarkupLine($"[red]{LanguageService.T("hero_not_found")}[/]");
+                Pause();
+                return;
+            }
 
-                if (confirmation == "y" || confirmation == "yes")
-                {
-                    _zTeam.Remove(hero);
-                    Console.WriteLine($"{name} ble fjernet fra laget.");
-                }
-                else
-                {
-                    Console.WriteLine($"{name} ble ikke fjernet.");
-                }
+            var choice = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title(string.Format(LanguageService.T("confirm_remove"), $"[red]{name}[/]"))
+                .AddChoices(LanguageService.T("yes"), LanguageService.T("no_choice"))
+            );
+
+            bool confirmed = choice == LanguageService.T("yes");
+            if (confirmed)
+            {
+                _zTeam.Remove(hero);
+                AnsiConsole.MarkupLine($"[green]{string.Format(LanguageService.T("hero_removed"), name)}[/]");
             }
             else
             {
-                Console.WriteLine("Ingen helt funnet med det navnet.");
+                AnsiConsole.MarkupLine($"[yellow]{LanguageService.T("remove_cancelled")}[/]");
             }
+
+            Pause();
+        }
+
+        // --------------------------------------------------------
+        private void Pause()
+        {
+            AnsiConsole.MarkupLine($"\n[grey]{LanguageService.T("press_any_key")}[/]");
+            Console.ReadKey();
         }
     }
 }
