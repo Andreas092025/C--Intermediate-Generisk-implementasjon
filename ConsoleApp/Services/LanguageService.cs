@@ -1,5 +1,4 @@
-
-namespace DispatchGame.UI
+namespace DispatchGame.Services
 
 {
     public static class LanguageService
@@ -21,7 +20,7 @@ namespace DispatchGame.UI
                         { "sort_heroes", "Sorter helter" },
                         { "save_json", "Lagre helter (JSON)" },
                         { "load_json", "Last inn helter (JSON)" },
-                        { "change_language", "Bytt språk" },
+                        { "change_language", "Bytt språk - Change Language" },
                         { "exit", "Avslutt" },
 
                         // Prompts
@@ -30,6 +29,51 @@ namespace DispatchGame.UI
                         { "enter_power", "Skriv inn powerlevel:" },
                         { "hero_not_found", "Ingen helt funnet med det navnet." },
                         
+                        // Oppdragssystem
+                        { "mission_menu_title", "Oppdragsmeny" },
+                        { "mission_start", "Start oppdrag" },
+                        { "mission_cancel", "Avbryt oppdrag" },
+                        { "mission_back", "Tilbake" },
+                        { "mission_list_empty", "Ingen oppdrag tilgjengelig." },
+                        { "mission_choose", "Velg et oppdrag:" },
+
+                        // Oppdragsnavn
+                        { "mission_fight_monsters", "Kjemp mot monstre" },
+                        { "mission_rescue_civilians", "Redde sivile" },
+                        { "mission_fire_rescue", "Brannredning" },
+                        { "mission_medical_aid", "Medisinsk hjelp" },
+                        { "mission_theft_and_robbery", "Tyveri og ran" },
+                        { "mission_accident_response", "Ulykkesrespons" },
+                        { "mission_assults_and_organized_crime", "Angrep og organisert kriminalitet" },
+                        
+
+                        // Oppdragsresultater
+                        { "fight_success", "{0} beseiret monstrene!" },
+                        { "fight_fail", "{0} ble slått tilbake…" },
+
+                        { "rescue_success", "{0} reddet de sivile!" },
+                        { "rescue_fail", "{0} klarte ikke å redde de sivile…" },
+
+                        { "fire_success", "{0} slukket brannen og reddet folk!" },
+                        { "fire_fail", "{0} klarte ikke å slukke brannen…" },
+
+                        { "medical_success", "{0} ga livreddende medisinsk hjelp!" },
+                        { "medical_fail", "{0} klarte ikke å gi medisinsk hjelp…" },
+
+                        { "theft_success", "{0} stoppet tyveriet og ranet!" },
+                        { "theft_fail", "{0} klarte ikke å stoppe tyveriet…" },
+
+                        { "accident_success", "{0} håndterte ulykkesresponsen effektivt!" },
+                        { "accident_fail", "{0} klarte ikke å håndtere ulykkesresponsen…" },
+
+                        { "assault_success", "{0} stoppet angrepene og den organiserte kriminaliteten!" },
+                        { "assault_fail", "{0} klarte ikke å stoppe angrepene…" },
+
+                        { "crime_success", "{0} bekjempet angrepene og den organiserte kriminaliteten!" },
+                        { "crime_fail", "{0} klarte ikke å bekjempe angrepene…" },
+
+
+
                         // Additional keys used by Menu
                         { "no_heroes", "Ingen helter i laget." },
                         { "col_name", "Navn" },
@@ -91,7 +135,51 @@ namespace DispatchGame.UI
                         { "enter_role", "Enter role:" },
                         { "enter_power", "Enter power level:" },
                         { "hero_not_found", "No hero found with that name." },
+
+                        // Missonsystem
+                        { "mission_menu_title", "Mission Menu" },
+                        { "mission_start", "Start Mission" },
+                        { "mission_cancel", "Cancel Mission" },
+                        { "mission_back", "Back" },
+                        { "mission_list_empty", "No missions available." },
+                        { "mission_choose", "Choose a mission:" },
+
+                        // The missions
+                        { "mission_fight_monsters", "Fight monsters" },
+                        { "mission_rescue_civilians", "Rescue civilians" },
+                        { "mission_fire_rescue", "Fire rescue" },
+                        { "mission_medical_aid", "Medical aid" },
+                        { "mission_theft_and_robbery", "Theft and robbery" },
+                        { "mission_accident_response", "Accident response" },
+                        { "mission_assults_and_organized_crime", "Assaults and organized crime" },
                         
+
+                        // Mission results
+                        { "fight_success", "{0} defeated the monsters!" },
+                        { "fight_fail", "{0} was overwhelmed…" },
+
+                        { "rescue_success", "{0} rescued the civilians!" },
+                        { "rescue_fail", "{0} failed to rescue the civilians…" },
+
+                        { "fire_success", "{0} extinguished the fire and saved people!" },
+                        { "fire_fail", "{0} failed to extinguish the fire…" },
+
+                        { "medical_success", "{0} provided lifesaving medical aid!" },
+                        { "medical_fail", "{0} was unable to provide medical help…" },
+
+                        { "theft_success", "{0} stopped the theft!" },
+                        { "theft_fail", "{0} failed to stop the theft…" },
+
+                        { "accident_success", "{0} handled the accident effectively!" },
+                        { "accident_fail", "{0} could not handle the accident…" },
+
+                        { "assault_success", "{0} stopped the assaults and organized crime!" },
+                        { "assault_fail", "{0} failed to stop the assaults…" },
+
+                        { "crime_success", "{0} stopped the attacks and organized crime!" },
+                        { "crime_fail", "{0} failed to stop the attacks…" },
+
+  
                         // Additional keys used by Menu
                         { "no_heroes", "No heroes in the team." },
                         { "col_name", "Name" },
@@ -144,7 +232,7 @@ namespace DispatchGame.UI
         {
             return Translations[CurrentLanguage].ContainsKey(key)
                 ? Translations[CurrentLanguage][key]
-                : $"[{key}]";
+                : $"{key}";
         }
     }
 }
