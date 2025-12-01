@@ -20,3 +20,7 @@
 
 - [ ] Add more ideas when you have time.
 
+
+## Improvements
+
+- Change the string values to Enum values? (How? Research for later improvments)

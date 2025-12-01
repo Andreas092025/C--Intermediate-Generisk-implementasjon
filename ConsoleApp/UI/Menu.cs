@@ -1,6 +1,8 @@
 using Spectre.Console;
 using DispatchGame.Models;
 using DispatchGame.Core;
+using DispatchGame.Services;
+using DispatchGame.Missions;
 
 namespace DispatchGame.UI
 {
@@ -35,6 +37,7 @@ namespace DispatchGame.UI
 
                 // Localized menu choices
                 var view = LanguageService.T("view_heroes");
+                var missions = LanguageService.T("mission_menu_title");
                 var add = LanguageService.T("add_hero");
                 var find = LanguageService.T("find_hero");
                 var sort = LanguageService.T("sort_heroes");
@@ -47,9 +50,10 @@ namespace DispatchGame.UI
 
                 var choice = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
-                        .AddChoices(new[] { view, add, find, sort, edit, remove, save, load, changeLang, exit }));
+                        .AddChoices(new[] { view, missions, add, find, sort, edit, remove, save, load, changeLang, exit }));
 
                 if (choice == view) DisplayHeroes();
+                else if (choice == missions) MissionMenu();
                 else if (choice == add) AddHero();
                 else if (choice == find) FindHero();
                 else if (choice == sort) SortHeroes();
@@ -102,6 +106,74 @@ namespace DispatchGame.UI
             AnsiConsole.Write(table);
             Pause();
         }
+
+        // --------------------------------------------------------
+        //         OPPDRAGS -  MISSION MENU
+        // --------------------------------------------------------
+
+        private async void MissionMenu()
+        {
+            AnsiConsole.Clear();
+
+            var heroes = _zTeam.GetAll();
+
+            if (heroes.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[red]Ingen helter tilgjengelige for oppdrag![/]");
+                Pause();
+                return;
+            }
+
+            //  Her legger du til nye oppdrag i missions-listen
+            var missions = new List<IMission>
+            {
+                new FightMonstersMission(),
+                new RescueCiviliansMission(),
+                new FireRescueMission(),
+                new MedicalAidMission(),
+                new AccidentResponseMission(),
+                new AssultsAndOrginizedCrimeMission(),
+                new TheftAndRobberyMission(),
+            };
+
+        var choice = AnsiConsole.Prompt(
+        new SelectionPrompt<string>()
+            .Title("[yellow]Velg oppdrag[/]")
+            .AddChoices(missions.Select(m => m.Name))
+    );
+
+    var selected = missions.First(m => m.Name == choice);
+
+    var dispatcher = new ProgressMissionDispatcher();
+
+    var results = await dispatcher.DispatchWithProgressAsync(heroes, selected);
+
+    // Etter progress-bars → Vis resultat-tabell
+    ShowMissionResults(results);
+}
+    private void ShowMissionResults(List<MissionResult> results)
+{
+    var table = new Table()
+        .AddColumn("Helt")
+        .AddColumn("Oppdrag")
+        .AddColumn("Status")
+        .AddColumn("Detaljer");
+
+    foreach (var r in results)
+    {
+        table.AddRow(
+            r.Hero.Name,
+            r.MissionName,
+            r.Success ? "[green]Suksess[/]" : "[red]Feilet[/]",
+            r.Message
+        );
+    }
+
+    AnsiConsole.Write(table);
+    Pause();
+}
+
+
 
         // --------------------------------------------------------
         //         LEGG TIL HELT - ADD HERO
