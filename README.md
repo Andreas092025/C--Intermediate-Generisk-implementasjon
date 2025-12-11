@@ -2,3 +2,8 @@
 
 
 Database w/ JSON method and a Pre-loaded with some Heroes
+
+AdHoc Studio owns the rights to the game: Dispatch
+
+Check the real game out here:
+https://store.steampowered.com/app/2592160/Dispatch/
